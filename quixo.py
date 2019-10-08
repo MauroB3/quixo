@@ -46,3 +46,16 @@ class Quixo:
         self.modify_board(origin, destiny)
 
 
+    def printBoard(self):
+        for row in range(len(self.board)):
+            print('+' + '-----+'*len(self.board[0]))
+            print('|', end='  ')
+            for col in range(len(self.board[row])):
+                print(self.board[row][col], end='  |  ')
+            print('') #To change lines
+        print('+-----'*(len( self.board[0])) + '+')
+
+
+if __name__ == '__main__':
+    q = Quixo()
+    q.printBoard()
