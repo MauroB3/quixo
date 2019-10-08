@@ -52,7 +52,7 @@ class Quixo:
             print('|', end='  ')
             for col in range(len(self.board[row])):
                 print(self.board[row][col], end='  |  ')
-            print('') #To change lines
+            print('')
         print('+-----'*(len( self.board[0])) + '+')
 
 
