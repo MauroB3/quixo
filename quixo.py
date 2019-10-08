@@ -57,12 +57,15 @@ class Quixo:
 
         self.modify_board(origin, destiny, player)
 
-    def print_board(self):
-        for y in range (5):
-            print(end="| ")
-            for x in range(5):
-                print(self.board[y][x], end=" | ")
-            print("\n")
+    def printBoard(self):
+        for row in range(len(self.board)):
+            print('+' + '-----+'*len(self.board[0]))
+            print('|', end='  ')
+            for col in range(len(self.board[row])):
+                print(self.board[row][col], end='  |  ')
+            print('')
+        print('+-----'*(len( self.board[0])) + '+')
+
 
 if __name__ == '__main__':
     game = Quixo()
@@ -75,16 +78,3 @@ if __name__ == '__main__':
 
     game.print_board()
 
-    def printBoard(self):
-        for row in range(len(self.board)):
-            print('+' + '-----+'*len(self.board[0]))
-            print('|', end='  ')
-            for col in range(len(self.board[row])):
-                print(self.board[row][col], end='  |  ')
-            print('')
-        print('+-----'*(len( self.board[0])) + '+')
-
-
-if __name__ == '__main__':
-    q = Quixo()
-    q.printBoard()
