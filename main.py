@@ -2,10 +2,9 @@ from quixo import Quixo
 
 game = Quixo()
 
-move = (15, 7)
+move = (15, 1)
 game.opponent_play(move)
-move2 = (7, 15)
-game.opponent_play(move2)
-
+move = (1, 13)
+game.opponent_play(move)
 
 game.print_board()

@@ -65,16 +65,3 @@ class Quixo:
                 print(self.board[row][col], end='  |  ')
             print('')
         print('+-----'*(len( self.board[0])) + '+')
-
-
-if __name__ == '__main__':
-    game = Quixo()
-
-    move = (15, 1)
-    game.opponent_play(move)
-    move = (1, 13)
-    game.opponent_play(move)
-
-    game.print_board()
-
-
