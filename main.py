@@ -9,4 +9,3 @@ game.opponent_play(move2)
 
 
 game.print_board()
-

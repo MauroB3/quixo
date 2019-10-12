@@ -14,42 +14,39 @@ class Quixo:
     def modify_board(self, origin, destiny, player):
         if origin == destiny:
             self.board[origin[0]][origin[1]] = player
-        elif origin[1] < destiny[1]:
-            self.push_line_left(player, origin[0], abs(origin[0] - destiny[0])) #izquierda
-        elif origin[1] > destiny[1]:
-            self.push_line_right(player, origin[0], abs(origin[0] - destiny[0])) #derecha
         elif origin[0] < destiny[0]:
-            self.push_column(1) #abajo
+            self.push_column_up(player, origin[1], origin[0], destiny[0]) #abajo
+        elif origin[0] > destiny[0]:
+            self.push_column_down(player, origin[1], origin[0], destiny[0]) #arriba
         else:
-            self.push_column(0) #arriba
+            self.push_line(player, origin[0], origin[1], destiny[1])
 
-    def push_column(self, direction):
-        pass
+    def push_column_up(self, player, column, origin, destiny):
+        self.board[origin][column] = player
+        for line in range(origin, destiny):
+            self.board[line][column], self.board[line + 1][column] = self.board[line + 1][column], self.board[line][column]
 
-    def push_line_right(self, player, line, delta):
-        new_line = copy.deepcopy(self.board[line])
-        new_line[0] = player
-        for x in range(1, delta + 1):
-            new_line[x] = self.board[line][x - 1]
-        self.board[line] = new_line
+    def push_column_down(self, player, column, origin, destiny):
+        self.board[origin][column] = player
+        for line in reversed(range(destiny + 1, origin + 1)):
+            self.board[line][column], self.board[line - 1][column] = self.board[line - 1][column], self.board[line][column]
 
-    def push_line_left(self, player, line, delta):
-        new_line = copy.deepcopy(self.board[line])
-        new_line[4] = player
-        for x in range(delta + 1, 4):
-            new_line[x] = self.board[line][x + 1]
-        self.board[line] = new_line
+    def push_line(self, player, line, origin, next_position):
+        self.board[line].pop(origin)
+        self.board[line].insert(next_position, player)
 
-    def player_play(self):
-        pass
+    def possible_destionations(self, origin):
+        return [(origin[0], 0), (origin[0], 4), (0, origin[1]), (4, origin[1])]
 
     def valid_movement(self, origin, destiny, player):
-        return (origin[0] == destiny[0] or origin[1] == destiny[1]) and\
-               (self.board[origin[0]][origin[1]] == player or self.board[origin[0]][origin[1]] == 0)
+        return destiny in self.edges and \
+                origin in self.edges and \
+                destiny in self.possible_destionations(origin) and \
+                (self.board[origin[0]][origin[1]] == player or self.board[origin[0]][origin[1]] == 0)
 
-    def opponent_play(self, move):
-        origin = self.edges[move[0]]
-        destiny = self.edges[move[1]]
+    def opponent_play(self, movement):
+        origin = self.edges[movement[0]]
+        destiny = self.edges[movement[1]]
         player = -1
 
         if not self.valid_movement(origin, destiny, player):
@@ -57,7 +54,10 @@ class Quixo:
 
         self.modify_board(origin, destiny, player)
 
-    def printBoard(self):
+    def player_play(self):
+        pass
+
+    def print_board(self):
         for row in range(len(self.board)):
             print('+' + '-----+'*len(self.board[0]))
             print('|', end='  ')
@@ -70,11 +70,11 @@ class Quixo:
 if __name__ == '__main__':
     game = Quixo()
 
-    move = (15, 7)
+    move = (15, 1)
     game.opponent_play(move)
-    move2 = (7, 15)
-    game.opponent_play(move2)
-
+    move = (1, 13)
+    game.opponent_play(move)
 
     game.print_board()
+
 
