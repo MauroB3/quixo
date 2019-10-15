@@ -35,13 +35,18 @@ class Quixo:
         self.board[line].pop(origin)
         self.board[line].insert(next_position, player)
 
-    def possible_destionations(self, origin):
+    @staticmethod
+    def possible_destinations(origin):
         return [(origin[0], 0), (origin[0], 4), (0, origin[1]), (4, origin[1])]
+
+    def possible_movements(self, player):
+        asd = list(map(lambda r: self.board[r[0]][r[1]] == player or self.board[r[0]][r[1]] == "-"))
+        return map(self.possible_destinations, asd)
 
     def valid_movement(self, origin, destiny, player):
         return destiny in self.edges and \
                 origin in self.edges and \
-                destiny in self.possible_destionations(origin) and \
+                destiny in self.possible_destinations(origin) and \
                 (self.board[origin[0]][origin[1]] == player or self.board[origin[0]][origin[1]] == 0)
 
     def opponent_play(self, movement):
