@@ -77,7 +77,10 @@ class Quixo:
         pass
 
     def game_over(self):
-        return self.check_vertical_win() or self.check_horizontal_win() or self.checkDiagonalOneWin() or self.checkDiagonalTwoWin()
+        return self.check_vertical_win() or \
+               self.check_horizontal_win() or \
+               self.check_diagonal_one_win() or \
+               self.check_diagonal_two_win()
 
     def check_vertical_win(self):
         for y in range(5):
@@ -103,7 +106,7 @@ class Quixo:
                 return True
         return False
 
-    def checkDiagonalOneWin(self):
+    def check_diagonal_one_win(self):
         if  (self.board[0][0]
                 == self.board[1][1]
                 == self.board[2][2]
@@ -114,7 +117,7 @@ class Quixo:
         else:
             return False
 
-    def checkDiagonalTwoWin(self):
+    def check_diagonal_two_win(self):
         if  (self.board[0][4]
                 == self.board[1][3]
                 == self.board[2][2]
