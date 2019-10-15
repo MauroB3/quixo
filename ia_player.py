@@ -30,3 +30,5 @@ class IAPlayer:
                     best_move = move
             return best_move
 
+
+

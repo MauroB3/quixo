@@ -1,6 +1,3 @@
-import itertools
-
-
 class Quixo:
 
     def __init__(self):
@@ -10,6 +7,7 @@ class Quixo:
                       (1, 4), (2, 4), (3, 4), (4, 4),
                       (4, 3), (4, 2), (4, 1), (4, 0),
                       (3, 0), (2, 0), (1, 0)]
+        self.winner = 0
 
     def modify_board(self, origin, destiny, player):
         if origin == destiny:
@@ -56,9 +54,6 @@ class Quixo:
                 result += self.possible_destinations(index)
         return result
 
-    def possible_movements2(self, player):
-        return list(itertools.chain.from_iterable(map(lambda cell: self.possible_destinations(self.edges.index(cell) + 1) if self.cell_available_for_player(cell, player) else [], self.edges)))
-
     def valid_movement(self, origin, destiny, player):
         return destiny in self.edges and \
                 origin in self.edges and \
@@ -83,6 +78,30 @@ class Quixo:
 
     def game_over(self):
         pass
+
+    def check_vertical_win(self):
+        for y in range(5):
+            if ((self.board[0][y] != 0) and
+                    (self.board[0][y] ==
+                        self.board[0 + 1][y] ==
+                        self.board[0 + 2][y] ==
+                        self.board[0 + 3][y] ==
+                        self.board[0 + 4][y])):
+                self.winner = self.board[0][y]
+                return True
+        return False
+
+    def check_horizontal_win(self):
+        for x in range(5):
+            if ((self.board[x][0] != 0) and
+                    (self.board[x][0] ==
+                        self.board[x][0 + 1] ==
+                        self.board[x][0 + 2] ==
+                        self.board[x][0 + 3] ==
+                        self.board[x][0 + 4])):
+                self.winner = self.board[x][0]
+                return True
+        return False
 
     def print_board(self):
         for row in range(len(self.board)):
