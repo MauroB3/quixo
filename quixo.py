@@ -1,8 +1,11 @@
+import itertools
+
+
 class Quixo:
 
     def __init__(self):
         self.board = [[0 for x in range(5)] for y in range(5)]
-        self.edges = [(100, 100),
+        self.edges = [
                       (0, 0), (0, 1), (0, 2), (0, 3), (0, 4),
                       (1, 4), (2, 4), (3, 4), (4, 4),
                       (4, 3), (4, 2), (4, 1), (4, 0),
@@ -37,23 +40,37 @@ class Quixo:
         self.board[line].pop(origin)
         self.board[line].insert(next_position, player)
 
-    @staticmethod
-    def possible_destinations(origin):
-        return [(origin[0], 0), (origin[0], 4), (0, origin[1]), (4, origin[1])]
+    def possible_destinations(self, origin):
+        y, x = self.edges[origin - 1]
+        destinations = [(origin, origin),
+                        (origin, self.edges.index((y, 0)) + 1), (origin, self.edges.index((y, 4)) + 1),
+                        (origin, self.edges.index((0, x)) + 1), (origin, self.edges.index((4, x)) + 1)]
+        return list(dict.fromkeys(destinations))
 
     def possible_movements(self, player):
-        asd = list(map(lambda r: self.board[r[0]][r[1]] == player or self.board[r[0]][r[1]] == "-"))
-        return map(self.possible_destinations, asd)
+        result = []
+        index = 0
+        for cell in self.edges:
+            index += 1
+            if self.cell_available_for_player(cell, player):
+                result += self.possible_destinations(index)
+        return result
+
+    def possible_movements2(self, player):
+        return list(itertools.chain.from_iterable(map(lambda cell: self.possible_destinations(self.edges.index(cell) + 1) if self.cell_available_for_player(cell, player) else [], self.edges)))
 
     def valid_movement(self, origin, destiny, player):
         return destiny in self.edges and \
                 origin in self.edges and \
-                destiny in self.possible_destinations(origin) and \
-                (self.board[origin[0]][origin[1]] == player or self.board[origin[0]][origin[1]] == 0)
+                (self.edges.index(origin), self.edges.index(origin)) in self.possible_destinations(self.edges.index(origin)) and \
+                self.cell_available_for_player(origin, player)
+
+    def cell_available_for_player(self, cell, player):
+        return self.board[cell[0]][cell[1]] == player or self.board[cell[0]][cell[1]] == 0
 
     def opponent_play(self, movement):
-        origin = self.edges[movement[0]]
-        destiny = self.edges[movement[1]]
+        origin = self.edges[movement[0] - 1]
+        destiny = self.edges[movement[1] - 1]
         player = -1
 
         if not self.valid_movement(origin, destiny, player):
