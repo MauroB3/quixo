@@ -23,6 +23,8 @@ move = (9, 5)
 game.opponent_play(move)
 
 
-game.print_board()
+#game.print_board()
 
-print(game.checkDiagonalTwoWin())
+#print(game.checkDiagonalTwoWin())
+
+
