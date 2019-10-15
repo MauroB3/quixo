@@ -1,30 +1,24 @@
 from quixo import Quixo
+from heuristic import check_horizontal
 
 game = Quixo()
 
-
-move = (1, 13)
-game.opponent_play(move)
-move = (2, 12)
-game.opponent_play(move)
-move = (2, 12)
-game.opponent_play(move)
-move = (11, 3)
-game.opponent_play(move)
-move = (11, 3)
-game.opponent_play(move)
-move = (11, 3)
-game.opponent_play(move)
-move = (10, 4)
-game.opponent_play(move)
-move = (10, 4)
-game.opponent_play(move)
-move = (9, 5)
-game.opponent_play(move)
+move = (1, 1)
+game.apply_move(move, 1)
+move = (2, 1)
+game.apply_move(move, 1)
+move = (2, 5)
+game.apply_move(move, 1)
+move = (4, 5)
+game.apply_move(move, 1)
+move = (3, 5)
+game.apply_move(move, 1)
+move = (2, 5)
+game.apply_move(move, 1)
 
 
-#game.print_board()
+game.print_board()
 
-#print(game.checkDiagonalTwoWin())
+print(check_horizontal(game.board[0], 1))
 
 

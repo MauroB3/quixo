@@ -1,3 +1,6 @@
+from heuristic import heuristic
+from ia_player import IAPlayer
+
 class Quixo:
 
     def __init__(self):
@@ -19,10 +22,10 @@ class Quixo:
         else:
             self.push_line(player, origin[0], origin[1], destiny[1])
 
-    def apply_move(self, move):
-        origin = self.edges.index(move[0])
-        destiny = self.edges.index(move[1])
-        self.modify_board(origin, destiny)
+    def apply_move(self, move, player):
+        origin = self.edges[move[0] - 1]
+        destiny = self.edges[move[1] - 1]
+        self.modify_board(origin, destiny, player)
 
     def push_column_up(self, player, column, origin, destiny):
         self.board[origin][column] = player
@@ -74,7 +77,8 @@ class Quixo:
         self.modify_board(origin, destiny, player)
 
     def player_play(self):
-        pass
+        player = IAPlayer()
+        return player.alphabeta(self, 1, 2, heuristic)
 
     def game_over(self):
         return self.check_vertical_win() or \
