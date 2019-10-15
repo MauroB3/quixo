@@ -1,6 +1,3 @@
-import copy
-
-
 class Quixo:
 
     def __init__(self):
@@ -20,6 +17,11 @@ class Quixo:
             self.push_column_down(player, origin[1], origin[0], destiny[0]) #arriba
         else:
             self.push_line(player, origin[0], origin[1], destiny[1])
+
+    def apply_move(self, move):
+        origin = self.edges.index(move[0])
+        destiny = self.edges.index(move[1])
+        self.modify_board(origin, destiny)
 
     def push_column_up(self, player, column, origin, destiny):
         self.board[origin][column] = player
@@ -60,6 +62,9 @@ class Quixo:
         self.modify_board(origin, destiny, player)
 
     def player_play(self):
+        pass
+
+    def game_over(self):
         pass
 
     def print_board(self):
