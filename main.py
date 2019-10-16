@@ -1,24 +1,25 @@
 from quixo import Quixo
-from heuristic import check_horizontal
-
-game = Quixo()
-
-move = (1, 1)
-game.apply_move(move, 1)
-move = (2, 1)
-game.apply_move(move, 1)
-move = (2, 5)
-game.apply_move(move, 1)
-move = (4, 5)
-game.apply_move(move, 1)
-move = (3, 5)
-game.apply_move(move, 1)
-move = (2, 5)
-game.apply_move(move, 1)
 
 
-game.print_board()
+def play():
+    game = Quixo()
+    player = -1
+    while not game.game_over():
+        print('\n' * 80)
+        game.print_board()
+        if player == -1:
+            print("Turno del jugador -1")
+            origin = int(input("Origen: "))
+            destiny = int(input("Destino: "))
+            move = (origin, destiny)
+            game.apply_move(move, player)
+            player = 1
+        else:
+            move = game.player_play()
+            game.apply_move(move, player)
+            player = -1
 
-print(check_horizontal(game.board[0], 1))
+
+play()
 
 

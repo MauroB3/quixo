@@ -14,8 +14,7 @@ class IAPlayer:
                 child = copy.deepcopy(game)
                 child.apply_move(move, player)
                 score = self.max_score(game, player, depth, h)
-                print(score)
-                if score > alpha:
+                if score >= alpha:
                     alpha = score
                     best_move = move
             return best_move
@@ -25,33 +24,33 @@ class IAPlayer:
                 child = copy.deepcopy(game)
                 child.apply_move(move, player)
                 score = self.min_score(game, player, depth, h)
-                if score < beta:
+                if score <= beta:
                     beta = score
                     best_move = move
             return best_move
 
     def max_score(self, game, player, depth, h):
         if depth == 0:
-            return h(game)
+            return h(game, player)
 
         score = 0
         for move in game.possible_movements(player):
             child = copy.deepcopy(game)
             child.apply_move(move, player)
-            current_score = self.max_score(child, player, depth - 1, h)
+            current_score = self.min_score(child, -player, depth - 1, h)
             if current_score > score:
                 score = current_score
         return score
 
     def min_score(self, game, player, depth, h):
         if depth == 0:
-            return -h(game)
+            return -h(game, player)
 
         score = 0
         for move in game.possible_movements(player):
             child = copy.deepcopy(game)
             child.apply_move(move, player)
-            current_score = self.max_score(child, player, depth - 1, h)
+            current_score = self.max_score(child, -player, depth - 1, h)
             if current_score < score:
                 score = current_score
         return score

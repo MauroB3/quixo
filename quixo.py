@@ -111,22 +111,24 @@ class Quixo:
         return False
 
     def check_diagonal_one_win(self):
-        if  (self.board[0][0]
+        if (self.board[0][0] != 0 and
+            (self.board[0][0]
                 == self.board[1][1]
                 == self.board[2][2]
                 == self.board[3][3]
-                == self.board[4][4]):
+                == self.board[4][4])):
             self.winner = self.board[0][0]
             return True
         else:
             return False
 
     def check_diagonal_two_win(self):
-        if  (self.board[0][4]
+        if (self.board[0][4] != 0 and
+            (self.board[0][4]
                 == self.board[1][3]
                 == self.board[2][2]
                 == self.board[3][1]
-                == self.board[4][0]):
+                == self.board[4][0])):
             self.winner = self.board[0][4]
             return True
         else:
