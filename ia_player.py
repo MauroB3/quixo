@@ -7,7 +7,7 @@ class IAPlayer:
     def get_next_move(self):
         pass
 
-    def alphabeta(self, game, player, depth, h, alpha=0, beta=0):
+    def alphabeta(self, game, player, depth, h, alpha=-inf, beta=inf):
         best_move = (-1, -1)
         if player == 1:
             for move in game.possible_movements(player):
