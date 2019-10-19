@@ -152,7 +152,8 @@ class Quixo:
                 result += 1
         return result
 
-    def translatePosition(self, pos):
+    @staticmethod
+    def translate_position(pos):
         if pos > 0:
             return 'X'
         else:
@@ -166,7 +167,7 @@ class Quixo:
             print('+' + '-----+' * len(self.board[0]))
             print('|', end='  ')
             for col in range(len(self.board[row])):
-                print(self.translatePosition(self.board[row][col]), end='  |  ')
+                print(self.translate_position(self.board[row][col]), end='  |  ')
             print('')
         print('+-----' * (len( self.board[0])) + '+')
 

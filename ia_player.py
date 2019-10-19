@@ -37,10 +37,9 @@ class IAPlayer:
             child = copy.deepcopy(game)
             child.apply_move(move, player)
             current_score = self.min_score(child, player, depth - 1, h, alpha, beta)
-            print("MAX: ", current_score)
             if current_score > alpha:
                 alpha = current_score
-                if current_score < beta:
+                if current_score >= beta:
                     break
         return alpha
 
@@ -52,10 +51,9 @@ class IAPlayer:
             child = copy.deepcopy(game)
             child.apply_move(move, player)
             current_score = self.max_score(child, player, depth - 1, h, alpha, beta)
-            print("MIN: ", current_score)
             if current_score < beta:
                 beta = current_score
-                if current_score > alpha:
+                if current_score <= alpha:
                     break
         return beta
 
