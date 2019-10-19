@@ -1,5 +1,9 @@
 def heuristic(game, player):
-   return check_horizontal(game, player) + check_vertical(game, player)
+
+    return check_horizontal(game, player) \
+           + check_vertical(game, player) \
+           + 16 - game.borders_available() \
+           + (100 if game.game_over_for_player(player) else 0)
 
 
 def check_horizontal(game, player):

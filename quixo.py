@@ -43,9 +43,12 @@ class Quixo:
 
     def possible_destinations(self, origin):
         y, x = self.edges[origin - 1]
-        destinations = [(origin, origin),
+        destinations = [
                         (origin, self.edges.index((y, 0)) + 1), (origin, self.edges.index((y, 4)) + 1),
                         (origin, self.edges.index((0, x)) + 1), (origin, self.edges.index((4, x)) + 1)]
+        if self.board[y][x] != 0:
+            destinations.remove((origin, origin))
+
         return list(dict.fromkeys(destinations))
 
     def possible_movements(self, player):
@@ -78,13 +81,17 @@ class Quixo:
 
     def player_play(self):
         player = IAPlayer()
-        return player.alphabeta(self, 1, 2, heuristic)
+        return player.alphabeta(self, 1, 4, heuristic)
 
     def game_over(self):
         return self.check_vertical_win() or \
                self.check_horizontal_win() or \
                self.check_diagonal_one_win() or \
                self.check_diagonal_two_win()
+
+    def game_over_for_player(self, player):
+        value = self.game_over() and self.winner == -player
+        return value
 
     def check_vertical_win(self):
         for y in range(5):
@@ -133,6 +140,13 @@ class Quixo:
             return True
         else:
             return False
+
+    def borders_available(self):
+        result = 0
+        for e in self.edges:
+            if self.board[e[0]][e[1]] == 0:
+                result += 1
+        return result
 
     def print_board(self):
         for row in range(len(self.board)):
