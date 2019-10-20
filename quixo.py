@@ -1,4 +1,4 @@
-from heuristic import heuristic
+from heuristic2 import heuristic
 from ia_player import IAPlayer
 
 
@@ -12,6 +12,7 @@ class Quixo:
             (4, 3), (4, 2), (4, 1), (4, 0),
             (3, 0), (2, 0), (1, 0)]
         self.winner = 0
+        self.current_movement_number = 1
 
     def modify_board(self, origin, destiny, player):
         if origin == destiny:
@@ -83,9 +84,13 @@ class Quixo:
 
         self.modify_board(origin, destiny, player)
 
+    def next_depth(self):
+        self.current_movement_number += 1
+        return 3 if self.current_movement_number < 6 else 5
+
     def player_play(self):
         player = IAPlayer()
-        return player.alphabeta(self, 1, 4, heuristic)
+        return player.alphabeta(self, 1, self.next_depth(), heuristic)
 
     def game_over(self):
         return self.check_vertical_win() or \
@@ -94,8 +99,7 @@ class Quixo:
                self.check_diagonal_two_win()
 
     def game_over_for_player(self, player):
-        value = self.game_over() and self.winner == -player
-        return value
+        return self.game_over() and self.winner == -player
 
     def check_vertical_win(self):
         for y in range(5):
@@ -152,6 +156,12 @@ class Quixo:
                 result += 1
         return result
 
+    def get_column(self, number):
+        column = []
+        for y in range(5):
+            column.append(self.board[y][number])
+        return column
+
     @staticmethod
     def translate_position(pos):
         if pos > 0:
@@ -160,7 +170,7 @@ class Quixo:
             if pos < 0:
                 return 'O'
             else:
-                return '0'
+                return '-'
 
     def print_board(self):
         for row in range(len(self.board)):

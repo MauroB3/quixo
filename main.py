@@ -1,4 +1,5 @@
 from quixo import Quixo
+from heuristic2 import heuristic
 
 
 def play():
@@ -39,13 +40,7 @@ game.apply_move(move, 1)
 move = (4, 4)
 game.apply_move(move, -1)
 
-
-#game.print_board()
+game.print_board()
 
 print(game.player_play())
-
-
-
-
-
 
