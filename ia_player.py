@@ -1,60 +1,81 @@
-import copy
+from copy import deepcopy
 from math import inf
 
 
 class IAPlayer:
 
+    def __init__(self):
+        self.current_movement_number = 0
+
     def get_next_move(self):
         pass
 
-    def alphabeta(self, game, player, depth, h, alpha=-inf, beta=inf):
-        best_move = (-1, -1)
-        if player == 1:
-            for move in game.possible_movements(player):
-                child = copy.deepcopy(game)
-                child.apply_move(move, player)
-                score = self.max_score(game, player, depth, h, alpha, beta)
+    def alphabeta(self, game, h, player, alpha=-inf, beta=inf):
+        depth = self.next_depth()
+        if player == -1:
+            legal_moves = game.possible_movements(-1)
+            if not legal_moves:
+                return -1, -1
+            best_current_move = legal_moves[0]
+            for move in legal_moves:
+                child = deepcopy(game)
+                child.apply_move(move, -1)
+                score = self.max_score(child, h, depth - 1, alpha, beta)
                 if score > alpha:
                     alpha = score
-                    best_move = move
-            return best_move
+                    best_current_move = move
+            return best_current_move
         else:
-            for move in game.possible_movements(player):
-                child = copy.deepcopy(game)
-                child.apply_move(move, player)
-                score = self.min_score(game, player, depth, h, alpha, beta)
+            legal_moves = game.possible_movements(1)
+            if not legal_moves:
+                return -1, -1
+            best_current_move = legal_moves[0]
+            for move in legal_moves:
+                child = deepcopy(game)
+                child.apply_move(move, 1)
+                score = self.min_score(child, h, depth - 1, alpha, beta)
                 if score < beta:
                     beta = score
-                    best_move = move
-            return best_move
+                    best_current_move = move
+            return best_current_move
 
-    def max_score(self, game, player, depth, h, alpha, beta):
+    def max_score(self, game, h, depth, alpha, beta):
         if depth == 0:
-            return h(game, player)
-
-        for move in game.possible_movements(player):
-            child = copy.deepcopy(game)
-            child.apply_move(move, player)
-            current_score = self.min_score(child, -player, depth - 1, h, alpha, beta)
-            if current_score > alpha:
-                alpha = current_score
-                if current_score >= beta:
+            return h(game, -1)
+        legal_moves = game.possible_movements(1)
+        for move in legal_moves:
+            child = deepcopy(game)
+            child.apply_move(move, 1)
+            score = self.min_score(child, h, depth - 1, alpha, beta)
+            if score > alpha:
+                alpha = score
+                if alpha >= beta:
                     break
         return alpha
 
-    def min_score(self, game, player, depth, h, alpha, beta):
+    def min_score(self, game, h, depth, alpha, beta):
         if depth == 0:
-            return h(game, player)
-
-        for move in game.possible_movements(player):
-            child = copy.deepcopy(game)
-            child.apply_move(move, player)
-            current_score = self.max_score(child, -player, depth - 1, h, alpha, beta)
-            if current_score < beta:
-                beta = current_score
-                if current_score <= alpha:
+            return h(game, -1)
+        legal_moves = game.possible_movements(-1)
+        for move in legal_moves:
+            child = deepcopy(game)
+            child.apply_move(move, -1)
+            score = self.max_score(child, h, depth - 1, alpha, beta)
+            if score < beta:
+                beta = score
+                if beta <= alpha:
                     break
         return beta
+
+    def next_depth(self):
+        self.current_movement_number += 1
+        if self.current_movement_number < 4:
+            return 1
+        else:
+            if self.current_movement_number < 6:
+                return 2
+            else:
+                return 3
 
 
 

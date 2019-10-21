@@ -1,35 +1,52 @@
 def heuristic(game, player):
 
-    return check_horizontal(game, player) \
-           + check_vertical(game, player) \
-           + 16 - game.borders_available() \
-           + (100 if game.game_over_for_player(player) else 0)
+    score = cells_of_player(game, player) \
+           + value_of_all_rows(game, player) \
+           + value_of_all_columns(game, player) \
+           + value_if_is_win(game, player)
+    return score
 
 
-def check_horizontal(game, player):
-    score = 0
-    best_score = 0
+def value_if_is_win(game, player):
+    if game.game_over():
+        if game.winner == player:
+            return 1000
+        else:
+            return -1000
+    else:
+        return 0
+
+
+def cells_of_player(game, player):
+    result = 0
     for y in range(5):
         for x in range(5):
             if game.board[y][x] == player:
-                score += 1
-                if score > best_score:
-                    best_score = score
-            else:
-                score = 0
-    return best_score
+                result += 1
+    return result
 
 
-def check_vertical(game, player):
+def value_of_all_rows(game, player):
+    score = 0
+    for raw in range(5):
+        score += value_of_list(game.board[raw], player)
+    return score
+
+
+def value_of_all_columns(game, player):
+    score = 0
+    for column in range(5):
+        score += value_of_list(game.get_column(column), player)
+    return score
+
+
+def value_of_list(listc, player):
     score = 0
     best_score = 0
-    for x in range(5):
-        for y in range(5):
-            if game.board[y][x] == player:
-                score += 1
-                if score > best_score:
-                    best_score = score
-            else:
-                score = 0
-    return best_score
-
+    for pos in range(5):
+        if listc[pos] == player:
+            score += 1
+            best_score = max(best_score, score)
+        else:
+            score = 0
+    return best_score * best_score

@@ -1,5 +1,6 @@
-from heuristic2 import heuristic
+from heuristic import heuristic
 from ia_player import IAPlayer
+from copy import deepcopy
 
 
 class Quixo:
@@ -12,7 +13,10 @@ class Quixo:
             (4, 3), (4, 2), (4, 1), (4, 0),
             (3, 0), (2, 0), (1, 0)]
         self.winner = 0
-        self.current_movement_number = 1
+        self.ia_player = IAPlayer()
+
+    def __eq__(self, other):
+        return self.board == other.board
 
     def modify_board(self, origin, destiny, player):
         if origin == destiny:
@@ -50,8 +54,8 @@ class Quixo:
         destinations = [
                         (origin, self.edges.index((y, 0)) + 1), (origin, self.edges.index((y, 4)) + 1),
                         (origin, self.edges.index((0, x)) + 1), (origin, self.edges.index((4, x)) + 1)]
-        if self.board[y][x] != 0:
-            destinations.remove((origin, origin))
+        #if self.board[y][x] != 0:
+        #    destinations.remove((origin, origin))
 
         return list(dict.fromkeys(destinations))
 
@@ -62,14 +66,22 @@ class Quixo:
             index += 1
             if self.cell_available_for_player(cell, player):
                 result += self.possible_destinations(index)
-        return result
+        return list(filter(lambda m: self.valid_movement(self.edges[m[0] - 1], self.edges[m[1] - 1], player), result))
 
     def valid_movement(self, origin, destiny, player):
+        origin_index = self.edges.index(origin) + 1
         return destiny in self.edges and \
-               origin in self.edges and \
-               (self.edges.index(origin), self.edges.index(origin)) in self.possible_destinations(
-            self.edges.index(origin)) and \
-               self.cell_available_for_player(origin, player)
+            origin in self.edges and \
+            (origin_index, origin_index) in self.possible_destinations(origin_index) and \
+            self.cell_available_for_player(origin, player) and \
+            self.move_modify_board(origin, destiny, player)
+
+    def move_modify_board(self, origin, destiny, player):
+        origin = self.edges.index(origin) + 1
+        destiny = self.edges.index(destiny) + 1
+        new_board = deepcopy(self)
+        new_board.apply_move((origin, destiny), player)
+        return self != new_board
 
     def cell_available_for_player(self, cell, player):
         return self.board[cell[0]][cell[1]] == player or self.board[cell[0]][cell[1]] == 0
@@ -84,19 +96,19 @@ class Quixo:
 
         self.modify_board(origin, destiny, player)
 
-    def next_depth(self):
-        self.current_movement_number += 1
-        return 3 if self.current_movement_number < 6 else 5
-
     def player_play(self):
-        player = IAPlayer()
-        return player.alphabeta(self, 1, self.next_depth(), heuristic)
+        move = self.ia_player.alphabeta(self, heuristic, 1)
+        self.apply_move(move, 1)
+        return move
 
     def game_over(self):
         return self.check_vertical_win() or \
                self.check_horizontal_win() or \
                self.check_diagonal_one_win() or \
                self.check_diagonal_two_win()
+
+    def is_winner(self, player):
+        return self.game_over() and self.winner == player
 
     def game_over_for_player(self, player):
         return self.game_over() and self.winner == -player
