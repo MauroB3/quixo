@@ -1,5 +1,5 @@
-from heuristic import heuristic
-from ia_player import IAPlayer
+from src.heuristic import heuristic
+from src.ia_player import IAPlayer
 from copy import deepcopy
 
 
@@ -86,7 +86,7 @@ class Quixo:
     def cell_available_for_player(self, cell, player):
         return self.board[cell[0]][cell[1]] == player or self.board[cell[0]][cell[1]] == 0
 
-    def opponent_play(self, movement):
+    def opponentPlay(self, movement):
         origin = self.edges[movement[0] - 1]
         destiny = self.edges[movement[1] - 1]
         player = -1
@@ -96,7 +96,7 @@ class Quixo:
 
         self.modify_board(origin, destiny, player)
 
-    def player_play(self):
+    def playerPlay(self):
         move = self.ia_player.alphabeta(self, heuristic, 1)
         self.apply_move(move, 1)
         return move
@@ -173,6 +173,12 @@ class Quixo:
         for y in range(5):
             column.append(self.board[y][number])
         return column
+
+    def play(self, time):
+        return self.playerPlay()  # noten que descarto el time, pero si lo quieren usar adelante
+
+    def update(self, move):
+        self.opponentPlay(move)
 
     @staticmethod
     def translate_position(pos):
