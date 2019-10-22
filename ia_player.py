@@ -70,7 +70,7 @@ class IAPlayer:
     def next_depth(self):
         self.current_movement_number += 1
         if self.current_movement_number < 4:
-            return 1
+            return 2
         else:
             if self.current_movement_number < 6:
                 return 2
