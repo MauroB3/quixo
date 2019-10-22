@@ -52,7 +52,7 @@ def value_of_list(listc, player):
 def heuristic(game, player):
     cells = cells_of_player(game, player)
     if cells >= 2:
-     return cells * 100000000000 \
+     return cells * 10 \
            + value_of_all_rows(game, player) \
            + value_of_all_columns(game, player) \
            + value_of_diagonals(game, player) * 0.5 \
