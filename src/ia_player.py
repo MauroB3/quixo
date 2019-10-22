@@ -7,8 +7,8 @@ class IAPlayer:
     def __init__(self):
         self.current_movement_number = 0
 
-    def get_next_move(self):
-        pass
+    def get_next_move(self, game, h, player):
+        return self.alphabeta(game, h, player)
 
     def alphabeta(self, game, h, player, alpha=-inf, beta=inf):
         depth = self.next_depth()
@@ -40,7 +40,7 @@ class IAPlayer:
             return best_current_move
 
     def max_score(self, game, h, depth, alpha, beta):
-        if depth == 0:
+        if depth == 0 or game.game_over():
             return h(game, -1)
         legal_moves = game.possible_movements(1)
         for move in legal_moves:
@@ -54,7 +54,7 @@ class IAPlayer:
         return alpha
 
     def min_score(self, game, h, depth, alpha, beta):
-        if depth == 0:
+        if depth == 0 or game.game_over():
             return h(game, -1)
         legal_moves = game.possible_movements(-1)
         for move in legal_moves:
@@ -69,7 +69,7 @@ class IAPlayer:
 
     def next_depth(self):
         self.current_movement_number += 1
-        if self.current_movement_number < 2:
+        if self.current_movement_number < 4:
             return 1
         else:
             return 3

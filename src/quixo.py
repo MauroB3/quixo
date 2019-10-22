@@ -70,9 +70,10 @@ class Quixo:
 
     def valid_movement(self, origin, destiny, player):
         origin_index = self.edges.index(origin) + 1
+        destiny_index = self.edges.index(destiny) + 1
         return destiny in self.edges and \
             origin in self.edges and \
-            (origin_index, origin_index) in self.possible_destinations(origin_index) and \
+            (origin_index, destiny_index) in self.possible_destinations(origin_index) and \
             self.cell_available_for_player(origin, player) and \
             self.move_modify_board(origin, destiny, player)
 
@@ -97,7 +98,7 @@ class Quixo:
         self.modify_board(origin, destiny, player)
 
     def playerPlay(self):
-        move = self.ia_player.alphabeta(self, heuristic, 1)
+        move = self.ia_player.get_next_move(self, heuristic, 1)
         self.apply_move(move, 1)
         return move
 

@@ -21,4 +21,3 @@ def play():
 
 play()
 
-

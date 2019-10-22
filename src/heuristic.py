@@ -1,13 +1,3 @@
-def heuristic(game, player):
-
-    score = cells_of_player(game, player) * 2 \
-           + value_of_all_rows(game, player) \
-           + value_of_all_columns(game, player) \
-           + value_of_diagonals(game, player) * 0.5 \
-           + value_if_is_win(game, player)
-    return score
-
-
 def value_if_is_win(game, player):
     if game.game_over():
         if game.winner == player:
@@ -56,4 +46,16 @@ def value_of_list(listc, player):
             best_score = max(best_score, score)
         else:
             score = 0
-    return best_score * 2
+    return best_score * best_score
+
+
+def heuristic(game, player):
+    cells = cells_of_player(game, player)
+    if cells >= 2:
+     return cells * 100000000000 \
+           + value_of_all_rows(game, player) \
+           + value_of_all_columns(game, player) \
+           + value_of_diagonals(game, player) * 0.5 \
+           + value_if_is_win(game, player)
+    else:
+        return 1
