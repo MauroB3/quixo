@@ -1,8 +1,8 @@
-from src.quixo import Quixo
+from src.bailon_eiroa_quixo import Bailon_eiroa_quixo
 
 
 def play():
-    game = Quixo()
+    game = Bailon_eiroa_quixo()
     player = 1
     while not game.game_over():
         game.print_board()
